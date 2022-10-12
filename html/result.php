@@ -16,13 +16,14 @@
         
         <div class="header">
             <p style="font-size: 45px;"><a href="index.php" style="text-decoration: none; color: white"><b>Testy</b></a></p>
-            <p style="font-size: 30px;">Wynik twojego testu</p>
+            <p style="font-size: 30px;">Wynik twojego quizu</p>
         </div>
         
         
         <?php
                 
-            echo $_POST["3"];    
+            
+            $a = $_POST["3"];    
         
         ?>
         

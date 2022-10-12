@@ -25,10 +25,16 @@
 
 .answear
 {
-    width: 100%;
+    padding: 1px;
+    width: 80%;
     margin: 3%;
     font-size: 20px;
     color: white;
+}
+
+.answear:hover
+{
+    background-color: #191919;
 }
 
 .footer
