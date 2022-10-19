@@ -14,7 +14,8 @@
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="styl.css">
     </head>
-    <body>
+    <body style="width: 50%; margin: auto">
+
         
         <div class="header">
             <p style="font-size: 45px;"><a href="index.php" style="text-decoration: none; color: white"><b>Quizy</b></a></p>
@@ -23,7 +24,9 @@
         
         
         <?php
-        
+            $correctAnswers = 0;
+            $wrongAnswers = 0;
+            $procent = 0;
         
             $answersArray = array();
             
@@ -40,26 +43,28 @@
                 
             }
         
-        
-            //print_r($_POST);
-            //echo "<br>";
-            //print_r($answersArray
-        
-                
-            $correctAnswers = 0;
             
             for($i = 0; $i < count($answersArray); $i++)
             {
                 if($answersArray[$i] == 1)
                 {
                     $correctAnswers++;
-                }  
+                } 
+                else
+                {
+                    $wrongAnswers++;
+                }
             }   
                 
         
             if($howManyCorrect != 0)
             {
-               $procent = (100 * $correctAnswers) / $howManyCorrect;  
+                if($correctAnswers - $wrongAnswers > 0)
+                {
+                    $procent = (100 * ($correctAnswers - $wrongAnswers)) / $howManyCorrect;  
+                }
+                
+              
             }
                 
             echo'
@@ -71,6 +76,7 @@
                     <br><br>
                     
                     <h3> Odpowiedziałeś poprawnie na: ' .$correctAnswers. ' odpowiedzi z ' .$howManyCorrect. ' poprawnych</h3>
+                    <h3> Odpowiedziałeś błędnie na: ' .$wrongAnswers. ' odpowiedzi</h3>
                 </div>
             ';
         
