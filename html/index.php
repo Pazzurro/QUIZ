@@ -29,6 +29,7 @@
                 $questionNumber = count($res->fetch_all(MYSQLI_ASSOC));
 
                 $radiantID = 0;  
+                $correctAnswers = 0;
             
                 $questionsAlredyHave = array();
 
@@ -39,20 +40,29 @@
 
                         echo'<div class="questionBox">';
                         
+                        
+                        
                         do
                         {
+                            $isRepetive = false;
+                            
                             $question = rand(1, $questionNumber); 
                             
                             for($i = 0; $i < count($questionsAlredyHave); $i++)
                             {
-                                if($question != $array[$i])
+                                if($question == $array[$i])
                                 {
-                                    
+                                    $isRepetive = true;
                                 }
                             }
                             
+                            if($isRepetive != true)
+                            {
+                                break;
+                            }
                             
-                        }while(true)
+                            
+                        }while(true);
                         
                         
 
@@ -84,14 +94,24 @@
                                     {
                                         echo '
                                             <div class="answear">
-                                                <input type="radio" name="answear'.$j.'" value="'.$answearRow[$i]["content"].'" id="' .$radiantID. '">
+                                                <input type="checkbox" name="' .$radiantID. '" value="'.$answearRow[$i]["isCorrect"].'" id="' .$radiantID. '">
                                                 <label for="' .$radiantID. '"> '.$answearRow[$i]["content"].' </label>
                                             </div>
                                         ';
+                                        
+                                        if($answearRow[$i]["isCorrect"] == 1)
+                                        {
+                                            $correctAnswers++;
+                                        }
 
                                         $radiantID++;
                                     } 
-                                }  
+                                }
+                                
+                                echo '
+                                    <input type="hidden" name="howManyCorrect" value="' .$correctAnswers. '">
+                                    <input type="hidden" name="howManyAnswers" value="' .$radiantID. '">
+                                ';
                             }
                         }
 

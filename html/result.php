@@ -17,43 +17,68 @@
     <body>
         
         <div class="header">
-            <p style="font-size: 45px;"><a href="index.php" style="text-decoration: none; color: white"><b>Testy</b></a></p>
+            <p style="font-size: 45px;"><a href="index.php" style="text-decoration: none; color: white"><b>Quizy</b></a></p>
             <p style="font-size: 30px;">Wynik twojego quizu</p>
         </div>
         
         
         <?php
+        
+        
+            $answersArray = array();
+            
+            $howManyCorrect = $_POST["howManyCorrect"];
+            $howManyAnswers = $_POST["howManyAnswers"];
+            
                 
-            if(isset($_POST["answear0"]) && isset($_POST["answear1"]) && isset($_POST["answear2"]) && isset($_POST["answear3"]) && isset($_POST["answear4"]))
+            for($i = 0; $i < $howManyAnswers; $i++)
             {
-                $answersArray = array($_POST["answear0"], $_POST["answear1"], $_POST["answear2"], $_POST["answear3"], $_POST["answear4"]);
-                
-                $correctAnswers = 0;
-                
-                if($correctAnswerResult = $db->query($sql_GetCorrectAnswers))
+                if(isset($_POST[$i]))
                 {
-                    while($correctAnswerRow = $correctAnswerResult->fetch_array())
-                    {
-                        for($i = 0; $i < 5; $i++)
-                        {
-                           if($answersArray[$i] == $correctAnswerRow["content"])
-                            {
-                                $correctAnswers++;
-                            }  
-                        }   
-                    } 
+                    array_push($answersArray, $_POST[$i]);
                 }
                 
-                $procent = ($correctAnswers * 20); 
-                
-                echo "Liczba poprawnych odpowiedzi: " .$correctAnswers. "<br> To daje: ".$procent. "%";
-                
-                
             }
-            else
+        
+        
+            //print_r($_POST);
+            //echo "<br>";
+            //print_r($answersArray
+        
+                
+            $correctAnswers = 0;
+            
+            for($i = 0; $i < count($answersArray); $i++)
             {
-               echo "Nie odpowiedziałeś na wszystkie odpowiedzi"; 
+                if($answersArray[$i] == 1)
+                {
+                    $correctAnswers++;
+                }  
+            }   
+                
+        
+            if($howManyCorrect != 0)
+            {
+               $procent = (100 * $correctAnswers) / $howManyCorrect;  
             }
+                
+            echo'
+                
+                <div class="questionBox" style="text-align: center; color: white">
+                    <h2> Twój wynik </h2>
+                    <h1> ' .round($procent, 2).' %</h1>
+                    
+                    <br><br>
+                    
+                    <h3> Odpowiedziałeś poprawnie na: ' .$correctAnswers. ' odpowiedzi z ' .$howManyCorrect. ' poprawnych</h3>
+                </div>
+            ';
+        
+        
+            //echo "Liczba poprawnych odpowiedzi: " .$howManyCorrect. "<br>";
+            //echo "Liczba twoich poprawnych odpowiedzi: " .$correctAnswers. "<br>";
+            //echo "Wynik w procentach: " .round($procent, 2). "%";
+
             
             
         
