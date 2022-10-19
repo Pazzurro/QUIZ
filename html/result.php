@@ -61,7 +61,7 @@
             {
                 if($correctAnswers - $wrongAnswers > 0)
                 {
-                    $procent = (100 * ($correctAnswers - $wrongAnswers)) / $howManyCorrect;  
+                    $procent = (100 * ($correctAnswers - ($wrongAnswers * 0.66))) / $howManyCorrect;  
                 }
                 
               
