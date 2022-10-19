@@ -14,7 +14,7 @@
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="styl.css">
     </head>
-    <body>
+    <body style="width: 50%; margin: auto">
         
         <div class="header">
             <p style="font-size: 45px;"><a href="index.php" style="text-decoration: none; color: white"><b>Quizy</b></a></p>
@@ -28,11 +28,14 @@
                 $res = $db->query("SELECT id FROM questions");
                 $questionNumber = count($res->fetch_all(MYSQLI_ASSOC));
 
+            
                 $radiantID = 0;  
                 $correctAnswers = 0;
             
+            
                 $questionsAlredyHave = array();
 
+            
                 if($result = $db->query($sql_Questions))
                 {
                     for($j = 0; $j < 5; $j++)
@@ -50,7 +53,7 @@
                             
                             for($i = 0; $i < count($questionsAlredyHave); $i++)
                             {
-                                if($question == $array[$i])
+                                if($question == $questionsAlredyHave[$i])
                                 {
                                     $isRepetive = true;
                                 }
@@ -58,6 +61,7 @@
                             
                             if($isRepetive != true)
                             {
+                                array_push($questionsAlredyHave, $question);
                                 break;
                             }
                             
