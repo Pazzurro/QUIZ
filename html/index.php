@@ -2,6 +2,8 @@
 
 <?php
     $db = new mysqli("127.0.0.1", "root", "", "quiz");
+
+    $sql_Questions = "SELECT questions.content AS question, answears.content AS answear, answears.isCorrect FROM questions JOIN answears ON questions.id = answears.Questions_id";
 ?>
 
 
@@ -16,64 +18,90 @@
         
         <div class="header">
             <p style="font-size: 45px;"><a href="index.php" style="text-decoration: none; color: white"><b>Quizy</b></a></p>
-            <p style="font-size: 30px;">Quiz składa się z trzech pytań</p>
+            <p style="font-size: 30px;">Quiz składa się z pięciu pytań</p>
         </div>
         
-        <form action="result.php" method="get">
-            <?php
+        
+        <form action="result.php" method="post">
+            <?php 
+            
                 $res = $db->query("SELECT id FROM questions");
                 $questionNumber = count($res->fetch_all(MYSQLI_ASSOC));
-                
+
+                $radiantID = 0;  
             
+                $questionsAlredyHave = array();
 
-                    echo'<div class="questionBox">';
-
-                    $question = rand(1, $questionNumber);  
-
-                    //ZAPYTANIE Z WYLOSOWANYM PYTANIANIEM
-                    $sql_Question = "SELECT id, content FROM questions WHERE id = " .$question;
-
-                    //ZAPYTANIE Z ODPOWIEDZIAMI DO PYTANIA
-                    $sql_Answears = "SELECT id AS answearID, content, isCorrect, Questions_id FROM answears WHERE Questions_id = " .$question;
-
-            
-    
-                    if($questionResult = $db->query($sql_Question))
+                if($result = $db->query($sql_Questions))
+                {
+                    for($j = 0; $j < 5; $j++)
                     {
-                        if($answearResult = $db->query($sql_Answears))
+
+                        echo'<div class="questionBox">';
+                        
+                        do
                         {
-                            $answearRow = $answearResult->fetch_all(MYSQLI_ASSOC);
-
-                            while($questionRow = $questionResult->fetch_array())
+                            $question = rand(1, $questionNumber); 
+                            
+                            for($i = 0; $i < count($questionsAlredyHave); $i++)
                             {
-                                
-                                echo '
-                                    <div class="question">
-                                        <p>' .$questionRow["content"]. '</p>
-                                    </div>
-                                    ';
+                                if($question != $array[$i])
+                                {
+                                    
+                                }
+                            }
+                            
+                            
+                        }while(true)
+                        
+                        
 
 
-                                for($i = 0; $i < count($answearRow); $i++)
+                        //ZAPYTANIE Z WYLOSOWANYM PYTANIANIEM
+                        $sql_Question = "SELECT id, content FROM questions WHERE id = " .$question;
+
+                        //ZAPYTANIE Z ODPOWIEDZIAMI DO PYTANIA
+                        $sql_Answears = "SELECT id AS answearID, content, isCorrect, Questions_id FROM answears WHERE Questions_id = " .$question;
+
+
+
+                        if($questionResult = $db->query($sql_Question))
+                        {
+                            if($answearResult = $db->query($sql_Answears))
+                            {
+                                $answearRow = $answearResult->fetch_all(MYSQLI_ASSOC);
+
+                                while($questionRow = $questionResult->fetch_array())
                                 {
                                     echo '
-                                        <div class="answear" onclick="openPage('.$question','$i')">
-                                            <p>'.$answearRow[$i]["content"].'</p>
+                                        <div class="question">
+                                            <p>' .$questionRow["content"]. '</p>
                                         </div>
                                     ';
-                                } 
-                            }  
+
+
+                                    for($i = 0; $i < count($answearRow); $i++)
+                                    {
+                                        echo '
+                                            <div class="answear">
+                                                <input type="radio" name="answear'.$j.'" value="'.$answearRow[$i]["content"].'" id="' .$radiantID. '">
+                                                <label for="' .$radiantID. '"> '.$answearRow[$i]["content"].' </label>
+                                            </div>
+                                        ';
+
+                                        $radiantID++;
+                                    } 
+                                }  
+                            }
                         }
 
-                    echo '<hr></div>';
+                        echo '<hr></div>';
+                    }
                 }
-
-                $db->close();
-        
             ?>
             
             <div class="header"> 
-                <button style="margin-top: 5%;" type="submit">Następne pytanie</button>
+                <button style="margin-top: 5%;" type="submit">Pokaż wyniki</button>
             </div>
         </form>
         
